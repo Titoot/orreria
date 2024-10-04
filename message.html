@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>Ontology-driven Orrery</title>
+		<style>
+      body { margin: 0; }
+      canvas { width: 100%; height: 100% ; vertical-align:bottom}
+		</style>
+	</head>
+	<body>
+	    <script src="http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="TrackballControls.js"></script>
+		<script src="OrbitalPropagator.js"></script>
+<!--	<script src="compacted_OrbitalOntology.jsonld"  type="application/ld+json" id="datablock"></script>  -->
+        <script id="OrbitOntology" type="application/ld+json">
+          {
+            "@context": {
+              "CelestialEntity": "http://www.w3.org/2002/07/owl#NamedIndividual",
+              "Name": "http://www.w3.org/2001/XMLSchema#Name",
+              "name": "http://www.semanticweb.org/rrovetto/ontologies/2014/space-situational-awareness-ontology#has_name",
+              "double": "http://www.w3.org/2001/XMLSchema#double",
+              "decimal": "http://www.w3.org/2001/XMLSchema#decimal",
+              "graph": "@graph",
+              "type": "@type",
+              "value": "@value"
+            },
+            "graph": [
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Mercury_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Mercury_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.20563"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "3.38"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "48.331"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "0.387098"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "88.0"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "281.01"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "29.124"
+                }
+              },
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Venus_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Venus_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.006772"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "3.86"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "76.68"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "0.723332"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "224.701"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "272.76"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "54.884"
+                }
+              },
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Earth_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Earth_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.016708"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "7.155"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "23.439281"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "1.0"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "365.25638"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "-11.26064"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "114.20783"
+                }
+              },
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Mars_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Mars_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.0934"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "5.65"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "317.68143"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "1.523679"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "686.971"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "49.558"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "286.502"
+                }
+              },
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Jupiter_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Jupiter_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.0489"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "6.09"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "268.057"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "5.2044"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "4332.59"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "100.464"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "273.867"
+                }
+              },
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Saturn_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Saturn_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.0565"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "5.51"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "40.589"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "9.5826"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "10759.22"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "113.665"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "339.392"
+                }
+              },
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Uranus_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Uranus_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.046381"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "6.48"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "257.311"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "19.2184"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "30688.5"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "74.006"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "96.998856"
+                }
+              },
+              {
+                "@id": "http://www.semanticweb.org/daoneil/ontologies/2016/7/untitled-ontology-34#Neptune_Orbit",
+                "type": ["CelestialEntity", "HelioCentricOrbit"],
+                "name": {
+                  "type": "Name",
+                  "value": "Neptune_Orbit"
+                },
+                "eccentricity": {
+                  "type": "decimal",
+                  "value": "0.009456"
+                },
+                "inclination": {
+                  "type": "decimal",
+                  "value": "6.43"
+                },
+                "raan": {
+                  "type": "decimal",
+                  "value": "131.784"
+                },
+                "semiMajorAxis": {
+                  "type": "decimal",
+                  "value": "30.110387"
+                },
+                "sidereal": {
+                  "type": "decimal",
+                  "value": "60190.03"
+                },
+                "argPerigee": {
+                  "type": "decimal",
+                  "value": "131.721"
+                },
+                "meanAnomoly": {
+                  "type": "decimal",
+                  "value": "45.0"
+                }
+              }
+            ]
+          }
+          
+          
+        </script>
+		<script>
+    var camera;
+		var controls;
+		var scene;
+		var cube;
+		var sphere;
+		var line;
+    var world;
+    var objNames = ["Mercury_Orbit", "Venus_Orbit", "Earth_Orbit", "Mars_Orbit", "Jupiter_Orbit", "Saturn_Orbit", "Uranus_Orbit", "Neptune_Orbit"];
+    var objLen = objNames.length;
+    var objSizes = [0.0000595, 0.0001479, 0.0001547, 0.0000833, 0.0017085, 0.0014195, 0.0006188, 0.0006001];
+    const textureLoader = new THREE.TextureLoader();
+    const sunTexture = textureLoader.load('/planets/8k_sun.jpg');
+    const mercuryTexture = textureLoader.load('/planets/2k_mercury.jpg');
+    const venusTexture = textureLoader.load('/planets/2k_venus.jpg');
+    const earthTexture = textureLoader.load('/planets/2k_earth.jpg');
+    const marsTexture = textureLoader.load('/planets/2k_mars.jpg');
+    const jupiterTexture = textureLoader.load('/planets/2k_jupiter.jpg');
+    const saturnTexture = textureLoader.load('/planets/2k_saturn.jpg');
+    const uranusTexture = textureLoader.load('/planets/2k_uranus.jpg');
+    const neptuneTexture = textureLoader.load('/planets/2k_neptune.jpg');
+
+    var textures = [mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture]
+		var curObj = new THREE.Object3D();
+		var celestialBody;
+		var heavenlyBodies = [];
+		
+		function init() {
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			  controls = new THREE.TrackballControls( camera );
+				controls.rotateSpeed = 0.5;
+				controls.zoomSpeed = 5.2;
+				controls.panSpeed = 1;
+				controls.noZoom = false;
+				controls.noPan = false;
+				controls.staticMoving = true;
+				controls.dynamicDampingFactor = 0.3;
+				controls.keys = [ 65, 83, 68 ];
+				controls.addEventListener( 'change', render );
+				
+			scene = new THREE.Scene();
+								
+            renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize( window.innerWidth, window.innerHeight);
+            document.body.appendChild( renderer.domElement );
+			
+
+		    var j = 0 ;
+
+
+
+
+      var worldURL = "https://eyes.nasa.gov/assets/static/textures/starmap_4096.jpg";
+      var worldTexture = textureLoader.load( worldURL );
+      var worldGeometry = new THREE.SphereGeometry( 500,60,60 );
+      var worldMaterial = new THREE.MeshBasicMaterial ( 
+        { color: 0xffffff ,
+        map: worldTexture ,
+        side: THREE.BackSide
+        } );
+      world = new THREE.Mesh( worldGeometry, worldMaterial );
+      scene.add( world );
+
+
+
+      		//  Here comes the Sun!
+			var geometry = new THREE.SphereGeometry( 0.017, 60, 60 );
+			var material = new THREE.MeshBasicMaterial( {map: sunTexture} );
+      sphere = new THREE.Mesh( geometry, material );
+			scene.add( sphere );
+			var light = new THREE.PointLight( 0xff0000, 1, 100 );
+            light.position.set( 100, 100, 100 );           
+            scene.add( light );                       // currently no effect
+			
+			for (i = 0; i < objLen; i++) { // Add the inner planets.
+		
+			 geometry = new THREE.SphereGeometry( objSizes[j] * 10, 60, 60 );
+		  //  material = new THREE.MeshBasicMaterial( {color: objColors[j], wireframe: false} );
+       material = new THREE.MeshBasicMaterial({ map: textures[j] });
+       sphere = new THREE.Mesh( geometry, material );
+			 
+			 sphere.name = objNames[i] ;
+             scene.add( sphere );
+			 
+			  j = j + 1 ;
+			} 
+      camera.position.x = 0;
+      camera.position.y = -100;
+			camera.position.z = 30;
+			
+		//	console.log(scene) ;
+		
+		}
+
+ 	 	function render() {
+      requestAnimationFrame( render );
+      renderer.render( scene, camera );
+      }  
+
+    function animate() {
+      requestAnimationFrame( animate );
+      controls.update();
+      updatePosition() ;
+      world.rotation.y += 0.0001
+      world.rotation.x += 0.0001
+      renderer.render( scene, camera );
+      }
+     
+    function onResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+window.addEventListener('resize', onResize, false);
+
+      
+   function get_datablock() {
+
+     // Reference https://stackoverflow.com/questions/38602543/is-there-a-way-to-access-json-ld-via-javascript-if-it-doesnt-have-an-id
+	    // var jsonld = document.querySelectorAll('script[type="application/ld+json"]').innerText;
+		var jsonld = document.querySelector('#OrbitOntology').innerText;
+         var result = JSON.parse(jsonld);
+       // console.log(result.graph[1].name.value);		
+		
+	  //   $.each(result.graph, function(i, field){
+	      for(i = 0; i < result.graph.length; i++) {
+		   field = result.graph[i];
+		   if (i >= 0 && i <= objLen) { // alert(field.name.value) ; 
+		
+		   //smA,oI,aP,oE,aN,mAe,Sidereal
+             celestialBody = new Trajectory(field.name.value,
+		                             field.semiMajorAxis.value,
+									 field.inclination.value,
+									 field.argPerigee.value,
+									 field.eccentricity.value,
+									 field.raan.value,
+									 field.meanAnomoly.value,
+									 field.sidereal.value);
+			 
+			 heavenlyBodies.push(celestialBody);
+	
+		   }		 
+
+		 }
+}
+      init() ;
+			get_datablock() ;	
+			traceOrbits() ;
+      animate() ;
+      onResize();
+		  
+		</script>
+	</body>
+</html>
