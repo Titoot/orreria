@@ -388,14 +388,41 @@
         scene.add(world);
 
       	//  Here comes the Sun!
+        // Create the Sun (Core)
         var geometry = new THREE.SphereGeometry(0.017, 60, 60);
         var material = new THREE.MeshBasicMaterial({map: sunTexture});
         sun = new THREE.Mesh(geometry, material);
         scene.add(sun);
-        var light = new THREE.PointLight(0xff0000, 1, 100);
-        light.position.set(100, 100, 100);           
-        scene.add(light); // currently no effect
-        
+
+        // // Create the glow effect around the sun
+        var glowGeometry = new THREE.SphereGeometry(0.017, 60, 60); // Slightly larger sphere for the glow border
+        var glowMaterial = new THREE.MeshBasicMaterial({
+            color: 0xf5bf6e, // Orange color for vintage effect
+            transparent: true,
+            opacity: 1, // Adjust for desired strength of the glow
+            blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
+        });
+        var glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
+        sun.add(glowMesh); // Add the glow mesh around the sun
+
+        // Optional: Create a glowing edge effect with texture
+        var glowTextureLoader = new THREE.TextureLoader();
+        var glowTexture = glowTextureLoader.load('Shaders/glow2.png'); // Load a texture
+
+        var glowSpriteMaterial = new THREE.SpriteMaterial({
+            map: glowTexture,
+            color: 0xffcd38, // Orange color for the texture
+            transparent: true,
+            opacity: 1, // Adjust opacity for strength
+            blending: THREE.AdditiveBlending
+        });
+
+        // Create a sprite for the glowing edge effect
+        var glowSprite = new THREE.Sprite(glowSpriteMaterial);
+        glowSprite.scale.set(0.1, 0.1, 1); // Adjust size of the glow sprite
+        glowMesh.add(glowSprite); // Attach the glow sprite to the glow mesh
+
+
         for (i = 0; i < objLen; i++) { // Add the inner planets.
       
         geometry = new THREE.SphereGeometry(objSizes[j] * 10, 60, 60);
@@ -424,7 +451,7 @@
       updatePosition();
       world.rotation.y += 0.0001;
       world.rotation.x += 0.00025;
-
+      // glowSprite.scale.set(0.3, 0.3, 1.2); // Adjust size of the glow sprite
       sun.rotation.y += 0.001;
       sun.rotation.x += 0.0001;
 
