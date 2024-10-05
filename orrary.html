@@ -647,7 +647,6 @@ input[type="checkbox"]:checked + label {
           zoomToPlanet(selectedPlanet);
           $('.panel h1').text(selectedPlanet.name.split('_')[0]);
           $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + selectedPlanet.name.split('_')[0], function(data) {
-              data  = JSON.parse(data);
               $('.panel .subtitle').text(data.tagline);
               $('.panel p').text(data.description);
               $('.panel').show();
@@ -669,7 +668,6 @@ input[type="checkbox"]:checked + label {
                 zoomToPlanet(planet);
                 $('.panel h1').text(planet.name.split('_')[0]);
                 $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + planet.name.split('_')[0], function(data) {
-                  data  = JSON.parse(data);
                   $('.panel .subtitle').text(data.tagline);
                   $('.panel p').text(data.description);
                   $('.panel').show();
@@ -753,7 +751,7 @@ function loadAstroids() {
           element.per
         );
 
-        geometry = new THREE.SphereGeometry( 0.1, 60, 60);
+        geometry = new THREE.SphereGeometry( 0.0009, 60, 60);
         material = new THREE.MeshBasicMaterial({ map: mercuryTexture });
         sphere = new THREE.Mesh(geometry, material);
         
