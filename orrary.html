@@ -398,15 +398,15 @@
     var objSizes = [0.0000595, 0.0001479, 0.0001547, 0.0000833, 0.0017085, 0.0014195, 0.0006188, 0.0006001];
     const textureLoader = new THREE.TextureLoader();
     const starsTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/starmap_4096.jpg');
-    const sunTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/8k_sun.jpg');
-    const mercuryTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_mercury.jpg');
-    const venusTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_venus.jpg');
-    const earthTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_earth.jpg');
-    const marsTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_mars.jpg');
-    const jupiterTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_jupiter.jpg');
-    const saturnTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_saturn.jpg');
-    const uranusTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_uranus.jpg');
-    const neptuneTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'planets/2k_neptune.jpg');
+    const sunTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/8k_sun.jpg');
+    const mercuryTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_mercury.jpg');
+    const venusTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_venus.jpg');
+    const earthTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_earth.jpg');
+    const marsTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_mars.jpg');
+    const jupiterTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_jupiter.jpg');
+    const saturnTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_saturn.jpg');
+    const uranusTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_uranus.jpg');
+    const neptuneTexture = textureLoader.load(window.location.origin+'/'+'orreria'+'/planets/2k_neptune.jpg');
 
     var textures = [mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture]
 		var curObj = new THREE.Object3D();
@@ -472,7 +472,7 @@
 
         // Optional: Create a glowing edge effect with texture
         var glowTextureLoader = new THREE.TextureLoader();
-        var glowTexture = glowTextureLoader.load(window.location.origin+'/'+'orreria'+'Shaders/glow2.png'); // Load a texture
+        var glowTexture = glowTextureLoader.load(window.location.origin+'/'+'orreria'+'/Shaders/glow2.png'); // Load a texture
 
         var glowSpriteMaterial = new THREE.SpriteMaterial({
             map: glowTexture,
