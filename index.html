@@ -12,7 +12,9 @@
 	    <script src="http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.40/jquery.csv.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/7/Stats.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/25.0.0/tween.umd.js"></script>
 		<script src="TrackballControls.js"></script>
 		<script src="OrbitalPropagator.js"></script>
 
@@ -323,6 +325,7 @@
           
         </script>
 		<script>
+    var raycaster, mouse, planets = [];
     var camera;
 		var controls;
 		var scene;
@@ -332,6 +335,8 @@
 		var line;
     var world;
     var stats;
+    var targetPlanet = null; // The planet that camera will follow
+    var offsetDistance = 5; // Distance from the planet
     var objNames = ["Mercury_Orbit", "Venus_Orbit", "Earth_Orbit", "Mars_Orbit", "Jupiter_Orbit", "Saturn_Orbit", "Uranus_Orbit", "Neptune_Orbit"];
     var objLen = objNames.length;
     var objSizes = [0.0000595, 0.0001479, 0.0001547, 0.0000833, 0.0017085, 0.0014195, 0.0006188, 0.0006001];
@@ -351,6 +356,7 @@
 		var curObj = new THREE.Object3D();
 		var celestialBody;
 		var heavenlyBodies = [];
+    var Astroids = [];
 		
 		function init() {
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -375,6 +381,9 @@
         document.body.appendChild(stats.domElement);
         document.body.appendChild(renderer.domElement);
         window.addEventListener('resize', onResize, true);
+
+        raycaster = new THREE.Raycaster();
+        mouse = new THREE.Vector2();
 
 		    var j = 0;
 
@@ -425,15 +434,18 @@
 
         for (i = 0; i < objLen; i++) { // Add the inner planets.
       
-        geometry = new THREE.SphereGeometry(objSizes[j] * 10, 60, 60);
+        geometry = new THREE.SphereGeometry(objSizes[j] * 100, 60, 60);
         material = new THREE.MeshBasicMaterial({ map: textures[j] });
-        sphere = new THREE.Mesh(geometry, material);
+        planet = new THREE.Mesh(geometry, material);
         
-        sphere.name = objNames[i];
-        scene.add(sphere);
+        planet.name = objNames[i];
+          planet.position.x = (i + 1) * 5;
+          planets.push(planet);
+          scene.add(planet);
         
           j = j + 1;
-        } 
+        }
+        document.addEventListener('mousedown', onDocumentMouseDown, false); 
         camera.position.x = 0;
         camera.position.y = -100;
         camera.position.z = 30;		
@@ -449,6 +461,7 @@
       controls.update();
       stats.update();
       updatePosition();
+      followPlanet();
       world.rotation.y += 0.0001;
       world.rotation.x += 0.00025;
       // glowSprite.scale.set(0.3, 0.3, 1.2); // Adjust size of the glow sprite
@@ -469,6 +482,54 @@
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
       }
+
+      function onDocumentMouseDown(event) {
+        event.preventDefault();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        var intersects = raycaster.intersectObjects(planets);
+
+        if (intersects.length > 0) {
+          var selectedPlanet = intersects[0].object;
+          targetPlanet = intersects[0].object; // Store the selected planet
+          console.log("Selected Planet:", targetPlanet.name);
+          zoomToPlanet(selectedPlanet);
+        }
+      }
+
+      function zoomToPlanet(planet) {
+        var targetPosition = planet.position.clone();
+        var zoomDistance = 2;  // Adjust as needed to control how much the camera zooms in
+
+        // Animate camera to zoom into planet
+        var tween = new TWEEN.Tween(camera.position).to({
+          x: targetPosition.x * zoomDistance,
+          y: targetPosition.y * zoomDistance,
+          z: targetPosition.z * zoomDistance
+        }, 1000).easing(TWEEN.Easing.Cubic.Out).start();
+
+        // Adjust controls to focus on planet
+        controls.target.copy(targetPosition);
+      }
+
+      function followPlanet() {
+    if (targetPlanet) {
+        const planetPosition = new THREE.Vector3();
+        targetPlanet.getWorldPosition(planetPosition); // Get planet's world position
+
+        // Offset the camera slightly behind or above the planet
+        const cameraTargetPosition = planetPosition.clone().add(new THREE.Vector3(offsetDistance, offsetDistance, offsetDistance));
+
+        // Smoothly move the camera to the target position (lerp for smooth transition)
+        camera.position.lerp(cameraTargetPosition, 0.1); // You can adjust the 0.1 for smoothness
+
+        // Make the camera look at the planet
+        camera.lookAt(planetPosition);
+    }
+}
 
    function get_datablock() {
     // Reference https://stackoverflow.com/questions/38602543/is-there-a-way-to-access-json-ld-via-javascript-if-it-doesnt-have-an-id
@@ -495,12 +556,51 @@
 
 		}
 }
-      init();
-			get_datablock();	
-			traceOrbits();
-      animate();
-      onResize();
-      render();
+
+function loadAstroids() {
+  return new Promise((resolve, reject) => {
+    $.get("/data.csv", function(CSVdata) {
+      data = $.csv.toObjects(CSVdata);
+      data.forEach(element => {
+        celestialBody = new Trajectory(
+          element.full_name,
+          element.a,
+          element.i,
+          element.w,
+          element.e,
+          element.om,
+          element.ma,
+          element.per
+        );
+
+        geometry = new THREE.SphereGeometry( 0.1, 60, 60);
+        material = new THREE.MeshBasicMaterial({ map: neptuneTexture });
+        sphere = new THREE.Mesh(geometry, material);
+        
+        sphere.name = element.full_name;
+        scene.add(sphere);
+
+        Astroids.push(celestialBody);
+        heavenlyBodies.push(celestialBody);
+      });
+      console.log(data);
+      resolve(); // Resolve when the data is loaded and processed
+    }).fail((err) => reject(err)); // Handle errors
+  });
+}
+
+async function initApp() {
+  init();
+  get_datablock();
+  await loadAstroids();  // Wait for loadAstroids to complete
+  traceOrbits();
+  animate();
+  onResize();
+  render();
+}
+
+// Call the main initialization function
+initApp();
 		  
 		</script>
 	</body>
