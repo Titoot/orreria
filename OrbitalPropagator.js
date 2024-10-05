@@ -42,39 +42,50 @@ return pos ;
 function traceOrbits() {  
     // Generate line segments from points around the trajectory of the orbiting objects.
     // Trace the orbits for the following array of objects.
-    var geometry;
     console.log("Entering traceOrbits " + heavenlyBodies.length);
     
     for (var hB in heavenlyBodies) {
         var orbPos = [];
-        var j = 0;                // Initialize the orbit index, which will build the orbIndices list. 
-        geometry = new THREE.Geometry();   // Create an object for each orbit.
+        var points = [];
         var i = 0.0;
         
         // Generate a random color for each orbit
         var color = Math.random() * 0xffffff; // Random color
 
+        // Increase the number of points by reducing the step size
         while (i <= 6.28) {
             orbPos = heavenlyBodies[hB].propagate(i);   // Propagate the orbits.
-            // Store the vertices.
-            geometry.vertices.push(new THREE.Vector3(orbPos[0].toFixed(2), orbPos[1].toFixed(2), orbPos[2].toFixed(2)));
-
-            i = i + 0.0785;
-            j = j + 1;          // Increment the orbit index.
+            // Store the points in THREE.Vector3 format for the curve
+            points.push(new THREE.Vector3(orbPos[0], orbPos[1], orbPos[2]));
+            i += 0.01;  // Smaller step for smoother curve
         }
-        
-        // Create a new material with the random color
-        var material = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.4 });
 
+        // Create a smooth curve from the points using CatmullRomCurve3
+        var curve = new THREE.CatmullRomCurve3(points);
+        var curvePoints = curve.getPoints(100);  // Get a smooth set of points from the curve
+
+        // Use THREE.Geometry to manually add the vertices
+        var geometry = new THREE.Geometry();
+        curvePoints.forEach(function(point) {
+            geometry.vertices.push(point);
+        });
+
+        // Create a new material with the random color
+        var material = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.6 });
+
+        // Create the line object from the geometry and material
         var line = new THREE.Line(geometry, material);
         var orbitName = heavenlyBodies[hB].name + "_trace"; 
         line.name = orbitName;
 
+        // Add the line to the scene
         scene.add(line);
         console.log("line name  " + orbitName);
     }
+    
     console.log("Exiting traceOrbits");
 };
+
 
 /*-------------------------------------------------------------*
  *   Utility functions for true, eccentric and mean anomalies  *
