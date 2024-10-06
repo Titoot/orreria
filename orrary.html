@@ -421,8 +421,8 @@
 				controls.noPan = false;
 				controls.staticMoving = true;
 				controls.dynamicDampingFactor = 0.3;
-        controls.minDistance = 0.12;
-        controls.maxDistance = 250;
+        controls.minDistance = 0.17;
+        controls.maxDistance = 100;
 				controls.keys = [65, 83, 68];
 
         stats = new Stats();
@@ -451,13 +451,13 @@
 
       	//  Here comes the Sun!
         // Create the Sun (Core)
-        var geometry = new THREE.SphereGeometry(0.017, 60, 60);
+        var geometry = new THREE.SphereGeometry(0.05, 60, 60);
         var material = new THREE.MeshBasicMaterial({map: sunTexture});
         sun = new THREE.Mesh(geometry, material);
         scene.add(sun);
 
         // // Create the glow effect around the sun
-        var glowGeometry = new THREE.SphereGeometry(0.017, 60, 60); // Slightly larger sphere for the glow border
+        var glowGeometry = new THREE.SphereGeometry(0.05, 60, 60); // Slightly larger sphere for the glow border
         var glowMaterial = new THREE.MeshBasicMaterial({
             color: 0xf5bf6e, // Orange color for vintage effect
             transparent: true,
@@ -481,13 +481,13 @@
 
         // Create a sprite for the glowing edge effect
         sunglow = new THREE.Sprite(glowSpriteMaterial);
-        sunglow.scale.set(0.1, 0.1, 1); // Adjust size of the glow sprite
+        sunglow.scale.set(0.5, 0.5, 1.4); // Adjust size of the glow sprite
         glowMesh.add(sunglow); // Attach the glow sprite to the glow mesh
 
 
         for (i = 0; i < objLen; i++) { // Add the inner planets.
       
-        geometry = new THREE.SphereGeometry(objSizes[j] * 100, 60, 60);
+        geometry = new THREE.SphereGeometry(objSizes[j] * 50, 60, 60);
         material = new THREE.MeshBasicMaterial({ map: textures[j] });
         planet = new THREE.Mesh(geometry, material);
         
