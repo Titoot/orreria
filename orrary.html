@@ -387,7 +387,7 @@
     var stats;
     var sunglow;
     var targetPlanet = null; // The planet that camera will follow
-    var offsetDistance = 5; // Distance from the planet
+    var offsetDistance = 0.2; // Distance from the planet
     var threshold = 0.3;
     var siteUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + '/';
     var objNames = ["Mercury_Orbit", "Venus_Orbit", "Earth_Orbit", "Mars_Orbit", "Jupiter_Orbit", "Saturn_Orbit", "Uranus_Orbit", "Neptune_Orbit"];
@@ -493,6 +493,7 @@
         
         planet.name = objNames[i];
           planet.position.x = (i + 1) * 5;
+          planet.rotation.y == 8;
           planets.push(planet);
           scene.add(planet);
         
@@ -527,11 +528,11 @@
       sun.rotation.y += 0.0001;
       sun.rotation.x += 0.001;
 
-      // for (i = 0; i < objLen; i++) {
-      //   curObj = scene.getObjectByName(objNames[i]);
-      //   // curObj.rotation.y += 0.01
-      //   curObj.rotation.x += 0.01
-      //   }
+      for (i = 0; i < objLen; i++) {
+        curObj = scene.getObjectByName(objNames[i]);
+        curObj.rotation.y += 0.001
+        // curObj.rotation.x += 0.01
+        }
 
       renderer.render(scene, camera);
       }
@@ -587,18 +588,45 @@
       }
       }
 
-      function zoomToPlanet(planet) {
-        var targetPosition = planet.position.clone();
-        var zoomDistance = 3;
+function zoomToPlanet(planet) {
+    var targetPosition = planet.position.clone(); // Clone the planet's position
+    var zoomDistance = 3; // Adjust zoom distance based on the scale of your scene
 
-        var tween = new TWEEN.Tween(camera.position).to({
-          x: targetPosition.x * zoomDistance,
-          y: targetPosition.y * zoomDistance,
-          z: targetPosition.z * zoomDistance
-        }, 1000).easing(TWEEN.Easing.Cubic.Out).start();
+    // Camera controls adjustments for smoother behavior
+    controls.rotateSpeed = 1.0;  // Reduced rotate speed for smoother rotations
+    controls.zoomSpeed = 3.0;    // Reduced zoom speed for smoother zooming
+    controls.panSpeed = 0.3;     // Reduce pan speed for smoother panning
+    controls.noZoom = false;
+    controls.noPan = false;
+    controls.staticMoving = true; // Enable dynamic movement for smoothness
+    controls.dynamicDampingFactor = 0.2; // Increase damping for even smoother control response
+    controls.minDistance = 0.17;
+    controls.maxDistance = 100;
+    controls.keys = [65, 83, 68]; // Control keys
 
-        controls.target.copy(targetPosition);
-      }
+    // Smooth transition for the camera position
+    new TWEEN.Tween(camera.position)
+        .to({
+            x: targetPosition.x * zoomDistance,
+            y: targetPosition.y * zoomDistance,
+            z: targetPosition.z * zoomDistance
+        }, 3000) // Further increased duration for smoother transition (3000ms)
+        .easing(TWEEN.Easing.Quadratic.Out) // Use a softer easing for smoother motion
+        .onUpdate(() => {
+            controls.target.copy(targetPosition); // Continuously update target
+        })
+        .start();
+
+    // Smoothly adjust the controls' target
+    new TWEEN.Tween(controls.target)
+        .to({
+            x: targetPosition.x,
+            y: targetPosition.y,
+            z: targetPosition.z
+        }, 3000) // Match the camera movement duration
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .start();
+}
 
       function followPlanet() {
     if (targetPlanet) {
@@ -612,6 +640,10 @@
         camera.lookAt(planetPosition);
     }
 }
+
+
+
+
 
    function get_datablock() {
     // Reference https://stackoverflow.com/questions/38602543/is-there-a-way-to-access-json-ld-via-javascript-if-it-doesnt-have-an-id
