@@ -373,6 +373,92 @@
           </div>
         </div>
       </div>
+
+      <script>
+        // Select all checkboxes in the document
+        const checkboxes = document.querySelectorAll('.layers-panel input[type="checkbox"]');
+      
+        // Function to handle checkbox clicks
+        function handleCheckboxClick(event) {
+          const checkboxId = event.target.id;
+          const isChecked = event.target.checked;
+          console.log(`Checkbox with ID ${checkboxId} is now ${isChecked ? 'checked' : 'unchecked'}`);
+          switch (checkboxId) {
+            case 'planets':
+              planetsOrbits.forEach(planetOrbit => {
+                planetOrbit.visible = isChecked ? true : false;
+              });
+              break;
+            case 'asteroids':
+              AstroidsOrbits.forEach(AstroidsOrbit => {
+                AstroidsOrbit.visible = isChecked ? true : false;
+              });
+              break;
+            case 'comets':
+              if (isChecked) {
+                console.log('Showing comets layer');
+                // Add your logic to show the comets layer
+              } else {
+                console.log('Hiding comets layer');
+                // Add your logic to hide the comets layer
+              }
+              break;
+            case 'spacecrafts':
+              if (isChecked) {
+                console.log('Showing spacecrafts layer');
+                // Add your logic to show the spacecrafts layer
+              } else {
+                console.log('Hiding spacecrafts layer');
+                // Add your logic to hide the spacecrafts layer
+              }
+              break;
+            case 'trails':
+              if (isChecked) {
+                console.log('Showing trails layer');
+                // Add your logic to show the trails layer
+              } else {
+                console.log('Hiding trails layer');
+                // Add your logic to hide the trails layer
+              }
+              break;
+            case 'orbits':
+              if (isChecked) {
+                console.log('Showing orbits layer');
+                // Add your logic to show the orbits layer
+              } else {
+                console.log('Hiding orbits layer');
+                // Add your logic to hide the orbits layer
+              }
+              break;
+            case 'labels':
+              if (isChecked) {
+                console.log('Showing labels layer');
+                // Add your logic to show the labels layer
+              } else {
+                console.log('Hiding labels layer');
+                // Add your logic to hide the labels layer
+              }
+              break;
+            case 'icons':
+              if (isChecked) {
+                console.log('Showing icons layer');
+                // Add your logic to show the icons layer
+              } else {
+                console.log('Hiding icons layer');
+                // Add your logic to hide the icons layer
+              }
+              break;
+            default:
+              console.log('Unknown layer');
+          }
+        }
+      
+        // Attach the event listener to each checkbox
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('click', handleCheckboxClick);
+        });
+        $('.layers-panel').show();
+      </script>
       
 		<script>
     var raycaster, mouse, planets = [];
@@ -411,6 +497,9 @@
 		var celestialBody;
 		var heavenlyBodies = [];
     var Astroids = [];
+    var planetsOrbits = [];
+    var AstroidsOrbits = [];
+    var spacecrafts = [];
 		
 		function init() {
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);

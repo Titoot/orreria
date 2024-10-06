@@ -80,6 +80,14 @@ function traceOrbits() {
 
         // Add the line to the scene
         scene.add(line);
+        if(heavenlyBodies[hB].name.includes("Orbit"))
+        {
+            planetsOrbits.push(line);
+        }
+        else
+        {
+            AstroidsOrbits.push(line);
+        }
         console.log("line name  " + orbitName);
     }
     
