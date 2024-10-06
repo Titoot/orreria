@@ -78,16 +78,22 @@ function traceOrbits() {
         var orbitName = heavenlyBodies[hB].name + "_trace"; 
         line.name = orbitName;
 
-        // Add the line to the scene
-        scene.add(line);
         if(heavenlyBodies[hB].name.includes("Orbit"))
         {
             planetsOrbits.push(line);
         }
         else
         {
+            line.material.opacity = 0.2;
+            // line.material.transparent = true;
+            line.material.color.r = 1;
+            line.material.color.g = 1;
+            line.material.color.b = 1;
             AstroidsOrbits.push(line);
         }
+
+        // Add the line to the scene
+        scene.add(line);
         console.log("line name  " + orbitName);
     }
     

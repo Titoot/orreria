@@ -743,6 +743,8 @@
           targetPlanet = intersects[0].object;
           console.log("Selected Planet:", targetPlanet.name);
           zoomToPlanet(selectedPlanet);
+          var orbitLine = scene.getObjectByName(selectedPlanet.name+'_trace');
+          orbitLine.visible = false;
           $('.panel h1').text(selectedPlanet.name.split('_')[0]);
           $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + selectedPlanet.name.split('_')[0], function(data) {
               $('.panel .subtitle').text(data.tagline);
@@ -761,6 +763,8 @@
 
             if (distance < threshold) { 
                 zoomToPlanet(planet);
+                var orbitLine = scene.getObjectByName(planet.name+'_trace');
+                orbitLine.visible = false;
                 targetPlanet = planet;
                 $('.panel h1').text(planet.name.split('_')[0]);
                 $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + planet.name.split('_')[0], function(data) {
