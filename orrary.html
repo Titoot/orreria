@@ -382,6 +382,7 @@
 		var cube;
 		var sphere;
     var sun;
+    var rings;
 		var line;
     var world;
     var stats;
@@ -485,20 +486,83 @@
         glowMesh.add(sunglow); // Attach the glow sprite to the glow mesh
 
 
+
+
+
+
+          // // Create fog effect
+          var fogGeometry = new THREE.SphereGeometry(0.05, 60, 60); 
+        var fogMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.1, // Adjust for desired strength of the glow
+            blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
+        });
+        var fogMesh = new THREE.Mesh(fogGeometry, fogMaterial);
+        sun.add(fogMesh); // Add the fog mesh around the sun
+
+        // Optional: Create a fog edge effect with texture
+        var fogTextureLoader = new THREE.TextureLoader();
+        var fogTexture = fogTextureLoader.load(siteUrl+'/Shaders/fog1.png'); // Load a texture
+
+        var fogSpriteMaterial = new THREE.SpriteMaterial({
+            map: fogTexture,
+            color: 0xffcd38, 
+            transparent: true,
+            opacity: 1, // Adjust opacity for strength
+            blending: THREE.AdditiveBlending
+        });
+
+        // Create a sprite for the glowing edge effect
+        spaceFog = new THREE.Sprite(fogSpriteMaterial);
+        spaceFog.scale.set(50, 50, 100); // Adjust size of the glow sprite
+        fogMesh.add(spaceFog); // Attach the glow sprite to the glow mesh
+
+
+
+
+
+
+
         for (i = 0; i < objLen; i++) { // Add the inner planets.
-      
-        geometry = new THREE.SphereGeometry(objSizes[j] * 50, 60, 60);
-        material = new THREE.MeshBasicMaterial({ map: textures[j] });
-        planet = new THREE.Mesh(geometry, material);
-        
-        planet.name = objNames[i];
-          planet.position.x = (i + 1) * 5;
-          planet.rotation.y == 8;
-          planets.push(planet);
-          scene.add(planet);
-        
-          j = j + 1;
+            // Create the planet geometry and material
+            geometry = new THREE.SphereGeometry(objSizes[j] * 50, 60, 60);
+            material = new THREE.MeshBasicMaterial({ map: textures[j] });
+            planet = new THREE.Mesh(geometry, material);
+            
+            // Set the name of the planet
+            planet.name = objNames[i];
+            
+            // Position the planet
+            planet.position.x = 5; // Adjust this as necessary for your scene
+            planet.rotation.y = 8; // Adjust rotation if needed
+            planets.push(planet);
+            
+            // Add planet to the scene
+            scene.add(planet);
+            
+            // If the planet is Saturn (index 5), create and add the rings
+            if (i === 5) {
+                // Create Saturn's rings
+                const ringGeometry = new THREE.TorusGeometry(planet.geometry.parameters.radius * 1.5, 0.005, 20, 50);
+                const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+                rings = new THREE.Mesh(ringGeometry, ringMaterial); // Initialize rings here
+                
+                // Rotate rings to lie flat
+                rings.rotation.x = Math.PI / 2;
+                
+                // Set position to match Saturn's position but with an offset
+                rings.position.copy(planet.position);
+                
+                // Add rings to the scene
+                scene.add(rings);
+            }
+            
+            // Increment j for the next planet
+            j = j + 1;
         }
+
+
         document.addEventListener('mousedown', onDocumentMouseDown, false); 
         camera.position.x = 0;
         camera.position.y = -100;
@@ -532,6 +596,11 @@
         curObj = scene.getObjectByName(objNames[i]);
         curObj.rotation.y += 0.001
         // curObj.rotation.x += 0.01
+        }
+
+      // If rings are defined, update their position to follow Saturn
+      if (rings) {
+            rings.position.copy(planet.position); // Update rings position to follow Saturn
         }
 
       renderer.render(scene, camera);
@@ -628,16 +697,25 @@ function zoomToPlanet(planet) {
         .start();
 }
 
-      function followPlanet() {
+function followPlanet() {
     if (targetPlanet) {
         const planetPosition = new THREE.Vector3();
-        targetPlanet.getWorldPosition(planetPosition);
+        targetPlanet.getWorldPosition(planetPosition); // Get the target planet's position in world space
 
-        const cameraTargetPosition = planetPosition.clone().add(new THREE.Vector3(offsetDistance, offsetDistance, offsetDistance));
+        // Get the target planet's size (assuming uniform scaling for simplicity)
+        const planetSize = targetPlanet.geometry.boundingSphere.radius; // or any axis scale if non-uniform
 
-        camera.position.lerp(cameraTargetPosition, 0.1);
+        // Calculate the target camera position with an offset based on the planet's size
+        const cameraTargetPosition = planetPosition.clone().add(new THREE.Vector3(planetSize * offsetDistance, planetSize * offsetDistance, planetSize * offsetDistance));
 
+        // Smoothly interpolate the camera's position towards the target
+        camera.position.lerp(cameraTargetPosition, 0.02); // Reduced lerp factor for even slower, smoother transitions
+
+        // Ensure the camera smoothly looks at the target planet
         camera.lookAt(planetPosition);
+
+        // Smoothly adjust the controls' target
+        controls.target.lerp(planetPosition, 0.015); // Use lower lerp for slower movement
     }
 }
 
