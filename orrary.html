@@ -3,64 +3,17 @@
 	<head>
 		<meta charset=utf-8>
 		<title>Ontology-driven Orrery</title>
-		<style>
-      body { margin: 0; overflow: hidden;}
-      canvas { width: 100%; height: 100%; vertical-align:bottom}
-        .panel {
-            width: 300px;
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            position: absolute;
-            top: 50%;
-            left: 10%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-        .panel h1 {
-            margin: 0;
-            font-size: 28px;
-            color: #fff;
-        }
-        .panel .subtitle {
-            font-size: 14px;
-            text-transform: uppercase;
-            color: #9e9e9e;
-            margin-top: 8px;
-        }
-        .panel p {
-            margin-top: 12px;
-            font-size: 14px;
-            color: #bdbdbd;
-            line-height: 1.6;
-        }
-        .special-options {
-            margin-top: 20px;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-        }
-        .special-options a {
-            display: block;
-            color: #00b0ff;
-            text-decoration: none;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .special-options a:hover {
-            text-decoration: underline;
-        }
-		</style>
+    <link rel="stylesheet" href="css/orraruy.css">
 	</head>
 	<body>
-	    <script src="http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.40/jquery.csv.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/7/Stats.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/25.0.0/tween.umd.js"></script>
-		<script src="TrackballControls.js"></script>
-		<script src="OrbitalPropagator.js"></script>
+    <script src="TrackballControls.js"></script>
+    <script src="OrbitalPropagator.js"></script>
 
         <script id="OrbitOntology" type="application/ld+json">
           {
@@ -379,6 +332,48 @@
               <a href="#">Explore Surface &#9658;</a>
           </div> -->
       </div>
+
+      <div class="layers-panel">
+        <h2 class="panel-title">Layers</h2>
+        <div class="layer-section">
+          <p class="section-title">User Interface</p>
+          <div class="layer-item">
+            <input type="checkbox" id="planets" checked />
+            <label for="planets">Planets</label>
+          </div>
+          <div class="layer-item">
+            <input type="checkbox" id="asteroids" />
+            <label for="asteroids">Asteroids</label>
+          </div>
+          <div class="layer-item">
+            <input type="checkbox" id="comets" />
+            <label for="comets">Comets</label>
+          </div>
+        </div>
+        <div class="layer-section">
+          <div class="layer-item">
+            <input type="checkbox" id="spacecrafts" />
+            <label for="spacecrafts">Spacecrafts</label>
+          </div>
+          <div class="layer-item">
+            <input type="checkbox" id="trails" />
+            <label for="trails">Trails</label>
+          </div>
+          <div class="layer-item">
+            <input type="checkbox" id="orbits" />
+            <label for="orbits">Orbits</label>
+          </div>
+          <div class="layer-item">
+            <input type="checkbox" id="labels" />
+            <label for="labels">Labels</label>
+          </div>
+          <div class="layer-item">
+            <input type="checkbox" id="icons" />
+            <label for="icons">Icons</label>
+          </div>
+        </div>
+      </div>
+      
 		<script>
     var raycaster, mouse, planets = [];
     var camera;
@@ -393,20 +388,21 @@
     var targetPlanet = null; // The planet that camera will follow
     var offsetDistance = 5; // Distance from the planet
     var threshold = 2;
+    var siteUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + '/';
     var objNames = ["Mercury_Orbit", "Venus_Orbit", "Earth_Orbit", "Mars_Orbit", "Jupiter_Orbit", "Saturn_Orbit", "Uranus_Orbit", "Neptune_Orbit"];
     var objLen = objNames.length;
     var objSizes = [0.0000595, 0.0001479, 0.0001547, 0.0000833, 0.0017085, 0.0014195, 0.0006188, 0.0006001];
     const textureLoader = new THREE.TextureLoader();
-    const starsTexture = textureLoader.load('planets/starmap_4096.jpg');
-    const sunTexture = textureLoader.load('planets/8k_sun.jpg');
-    const mercuryTexture = textureLoader.load('planets/2k_mercury.jpg');
-    const venusTexture = textureLoader.load('planets/2k_venus.jpg');
-    const earthTexture = textureLoader.load('planets/2k_earth.jpg');
-    const marsTexture = textureLoader.load('planets/2k_mars.jpg');
-    const jupiterTexture = textureLoader.load('planets/2k_jupiter.jpg');
-    const saturnTexture = textureLoader.load('planets/2k_saturn.jpg');
-    const uranusTexture = textureLoader.load('planets/2k_uranus.jpg');
-    const neptuneTexture = textureLoader.load('planets/2k_neptune.jpg');
+    const starsTexture = textureLoader.load(siteUrl+'/planets/starmap_4096.jpg');
+    const sunTexture = textureLoader.load(siteUrl+'/planets/8k_sun.jpg');
+    const mercuryTexture = textureLoader.load(siteUrl+'/planets/2k_mercury.jpg');
+    const venusTexture = textureLoader.load(siteUrl+'/planets/2k_venus.jpg');
+    const earthTexture = textureLoader.load(siteUrl+'/planets/2k_earth.jpg');
+    const marsTexture = textureLoader.load(siteUrl+'/planets/2k_mars.jpg');
+    const jupiterTexture = textureLoader.load(siteUrl+'/planets/2k_jupiter.jpg');
+    const saturnTexture = textureLoader.load(siteUrl+'/planets/2k_saturn.jpg');
+    const uranusTexture = textureLoader.load(siteUrl+'/planets/2k_uranus.jpg');
+    const neptuneTexture = textureLoader.load(siteUrl+'/planets/2k_neptune.jpg');
 
     var textures = [mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture]
 		var curObj = new THREE.Object3D();
@@ -472,7 +468,7 @@
 
         // Optional: Create a glowing edge effect with texture
         var glowTextureLoader = new THREE.TextureLoader();
-        var glowTexture = glowTextureLoader.load('Shaders/glow2.png'); // Load a texture
+        var glowTexture = glowTextureLoader.load(siteUrl+'/Shaders/glow2.png'); // Load a texture
 
         var glowSpriteMaterial = new THREE.SpriteMaterial({
             map: glowTexture,
@@ -555,13 +551,12 @@
           zoomToPlanet(selectedPlanet);
           $('.panel h1').text(selectedPlanet.name.split('_')[0]);
           $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + selectedPlanet.name.split('_')[0], function(data) {
-              data  = JSON.parse(data);
               $('.panel .subtitle').text(data.tagline);
               $('.panel p').text(data.description);
+              $('.panel').show();
           })
 
-          // Show the card
-          $('.panel').show();
+
         }else {
         // If no direct hits, check if we are within the threshold distance from any planet
         for (var i = 0; i < planets.length; i++) {
@@ -577,7 +572,6 @@
                 zoomToPlanet(planet);
                 $('.panel h1').text(planet.name.split('_')[0]);
                 $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + planet.name.split('_')[0], function(data) {
-                  data  = JSON.parse(data);
                   $('.panel .subtitle').text(data.tagline);
                   $('.panel p').text(data.description);
                   $('.panel').show();
@@ -647,7 +641,7 @@
 
 function loadAstroids() {
   return new Promise((resolve, reject) => {
-    $.get("/data.csv", function(CSVdata) {
+    $.get(siteUrl+"/data.csv", function(CSVdata) {
       data = $.csv.toObjects(CSVdata);
       data.forEach(element => {
         celestialBody = new Trajectory(
