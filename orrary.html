@@ -544,7 +544,7 @@
 
             // YAAA ABDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
             // If the planet is Saturn (index 5), create and add the rings
-            if (i === 5) {
+          if (i === 5) {
             // Create Saturn's rings
             const ringGeometry = new THREE.TorusGeometry(0.1, 0.01, 2, 200);
             
@@ -563,11 +563,11 @@
             rings.rotation.x = Math.PI / 2;
 
             // Set position to match Saturn's position but with an offset
-            rings.position.copy(planet.position);
+            // rings.position.copy(planet.position);
 
             // Add rings to the scene
             scene.add(rings);
-        }
+          }
 
             
             // Increment j for the next planet
@@ -606,13 +606,12 @@
 
       for (i = 0; i < objLen; i++) {
         curObj = scene.getObjectByName(objNames[i]);
+        if(rings && curObj.name === "Saturn_Orbit")
+        {
+          rings.position.copy(curObj.position);
+        }
         curObj.rotation.y += 0.001
         // curObj.rotation.x += 0.01
-        }
-
-      // If rings are defined, update their position to follow Saturn
-      if (rings) {
-            rings.position.copy(planet.position); // Update rings position to follow Saturn
         }
 
       renderer.render(scene, camera);
