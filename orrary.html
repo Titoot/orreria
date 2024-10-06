@@ -2,8 +2,8 @@
 <html>
 	<head>
 		<meta charset=utf-8>
-		<title>Ontology-driven Orrery</title>
-    <link rel="stylesheet" href="css/orraruy.css">
+		<title>Orreria</title>
+    <link rel="stylesheet" href="css/orrary.css">
 	</head>
 	<body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -385,9 +385,10 @@
 		var line;
     var world;
     var stats;
+    var sunglow;
     var targetPlanet = null; // The planet that camera will follow
     var offsetDistance = 5; // Distance from the planet
-    var threshold = 2;
+    var threshold = 0.3;
     var siteUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + '/';
     var objNames = ["Mercury_Orbit", "Venus_Orbit", "Earth_Orbit", "Mars_Orbit", "Jupiter_Orbit", "Saturn_Orbit", "Uranus_Orbit", "Neptune_Orbit"];
     var objLen = objNames.length;
@@ -479,9 +480,9 @@
         });
 
         // Create a sprite for the glowing edge effect
-        var glowSprite = new THREE.Sprite(glowSpriteMaterial);
-        glowSprite.scale.set(0.1, 0.1, 1); // Adjust size of the glow sprite
-        glowMesh.add(glowSprite); // Attach the glow sprite to the glow mesh
+        sunglow = new THREE.Sprite(glowSpriteMaterial);
+        sunglow.scale.set(0.1, 0.1, 1); // Adjust size of the glow sprite
+        glowMesh.add(sunglow); // Attach the glow sprite to the glow mesh
 
 
         for (i = 0; i < objLen; i++) { // Add the inner planets.
@@ -516,7 +517,12 @@
       followPlanet();
       world.rotation.y += 0.0001;
       world.rotation.x += 0.00025;
-      // glowSprite.scale.set(0.3, 0.3, 1.2); // Adjust size of the glow sprite
+      if(camera.position.z > 1)
+      {
+        sunglow.scale.set(0.1 * camera.position.z, 0.1 * camera.position.z, 1 * camera.position.z);
+      } else {
+        sunglow.scale.set(0.1, 0.1, 1);
+      }
       sun.rotation.y += 0.001;
       sun.rotation.x += 0.0001;
 
@@ -546,7 +552,7 @@
 
         if (intersects.length > 0) {
           var selectedPlanet = intersects[0].object;
-          targetPlanet = intersects[0].object; // Store the selected planet
+          targetPlanet = intersects[0].object;
           console.log("Selected Planet:", targetPlanet.name);
           zoomToPlanet(selectedPlanet);
           $('.panel h1').text(selectedPlanet.name.split('_')[0]);
@@ -557,26 +563,24 @@
           })
 
 
-        }else {
-        // If no direct hits, check if we are within the threshold distance from any planet
+        } else {
         for (var i = 0; i < planets.length; i++) {
             var planet = planets[i];
             var planetPosition = new THREE.Vector3();
-            planet.getWorldPosition(planetPosition); // Get planet's position
+            planet.getWorldPosition(planetPosition);
 
-            // Calculate the distance from the camera's ray to the planet's center
             var distance = raycaster.ray.distanceToPoint(planetPosition);
 
             if (distance < threshold) { 
-                // If the distance is within the threshold, consider it a hit
                 zoomToPlanet(planet);
+                targetPlanet = planet;
                 $('.panel h1').text(planet.name.split('_')[0]);
                 $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + planet.name.split('_')[0], function(data) {
                   $('.panel .subtitle').text(data.tagline);
                   $('.panel p').text(data.description);
                   $('.panel').show();
               })
-                break; // Exit loop once we found a hit within threshold
+                break;
             }
         }
       }
@@ -584,31 +588,26 @@
 
       function zoomToPlanet(planet) {
         var targetPosition = planet.position.clone();
-        var zoomDistance = 2;  // Adjust as needed to control how much the camera zooms in
+        var zoomDistance = 3;
 
-        // Animate camera to zoom into planet
         var tween = new TWEEN.Tween(camera.position).to({
           x: targetPosition.x * zoomDistance,
           y: targetPosition.y * zoomDistance,
           z: targetPosition.z * zoomDistance
         }, 1000).easing(TWEEN.Easing.Cubic.Out).start();
 
-        // Adjust controls to focus on planet
         controls.target.copy(targetPosition);
       }
 
       function followPlanet() {
     if (targetPlanet) {
         const planetPosition = new THREE.Vector3();
-        targetPlanet.getWorldPosition(planetPosition); // Get planet's world position
+        targetPlanet.getWorldPosition(planetPosition);
 
-        // Offset the camera slightly behind or above the planet
         const cameraTargetPosition = planetPosition.clone().add(new THREE.Vector3(offsetDistance, offsetDistance, offsetDistance));
 
-        // Smoothly move the camera to the target position (lerp for smooth transition)
-        camera.position.lerp(cameraTargetPosition, 0.1); // You can adjust the 0.1 for smoothness
+        camera.position.lerp(cameraTargetPosition, 0.1);
 
-        // Make the camera look at the planet
         camera.lookAt(planetPosition);
     }
 }
@@ -666,22 +665,21 @@ function loadAstroids() {
         heavenlyBodies.push(celestialBody);
       });
       console.log(data);
-      resolve(); // Resolve when the data is loaded and processed
-    }).fail((err) => reject(err)); // Handle errors
+      resolve();
+    }).fail((err) => reject(err));
   });
 }
 
 async function initApp() {
   init();
   get_datablock();
-  await loadAstroids();  // Wait for loadAstroids to complete
+  await loadAstroids();
   traceOrbits();
   animate();
   onResize();
   render();
 }
 
-// Call the main initialization function
 initApp();
 		  
 		</script>
