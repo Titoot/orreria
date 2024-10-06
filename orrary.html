@@ -578,41 +578,41 @@
 
 
 
-        // Create fog effect
-        var fogGeometry = new THREE.SphereGeometry(0.05, 60, 60); 
-        var fogMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.1, // Adjust for desired strength of the glow
-          blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
-        });
-        var fogMesh = new THREE.Mesh(fogGeometry, fogMaterial);
-        sun.add(fogMesh); // Add the fog mesh around the sun
+        // // Create fog effect
+        // var fogGeometry = new THREE.SphereGeometry(0.05, 60, 60); 
+        // var fogMaterial = new THREE.MeshBasicMaterial({
+        //   color: 0xffffff,
+        //   transparent: true,
+        //   opacity: 0.1, // Adjust for desired strength of the glow
+        //   blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
+        // });
+        // var fogMesh = new THREE.Mesh(fogGeometry, fogMaterial);
+        // sun.add(fogMesh); // Add the fog mesh around the sun
 
-        // Optional: Create a fog edge effect with texture
-        var fogTextureLoader = new THREE.TextureLoader();
-        var fogTexture = fogTextureLoader.load(siteUrl+'/Shaders/fog1.png'); // Load a texture
+        // // Optional: Create a fog edge effect with texture
+        // var fogTextureLoader = new THREE.TextureLoader();
+        // var fogTexture = fogTextureLoader.load(siteUrl+'/Shaders/fog1.png'); // Load a texture
 
-        var fogSpriteMaterial = new THREE.SpriteMaterial({
-            map: fogTexture,
-            color: 0xffcd38, 
-            transparent: true,
-            opacity: 1, // Adjust opacity for strength
-            blending: THREE.AdditiveBlending
-        });
+        // var fogSpriteMaterial = new THREE.SpriteMaterial({
+        //     map: fogTexture,
+        //     color: 0xffcd38, 
+        //     transparent: true,
+        //     opacity: 1, // Adjust opacity for strength
+        //     blending: THREE.AdditiveBlending
+        // });
 
-        // Create a sprite for the glowing edge effect
-        spaceFog = new THREE.Sprite(fogSpriteMaterial);
-        spaceFog.scale.set(50, 50, 100); // Adjust size of the glow sprite
-        fogMesh.add(spaceFog); // Attach the glow sprite to the glow mesh
-
-
+        // // Create a sprite for the glowing edge effect
+        // spaceFog = new THREE.Sprite(fogSpriteMaterial);
+        // spaceFog.scale.set(50, 50, 100); // Adjust size of the glow sprite
+        // fogMesh.add(spaceFog); // Attach the glow sprite to the glow mesh
 
 
 
 
-        
-        for (i = 0; i < objLen; i++) { // Add the inner planets.
+
+
+        // Add the inner planets.
+        for (i = 0; i < objLen; i++) { 
             // Create the planet geometry and material
             geometry = new THREE.SphereGeometry(objSizes[j] * 50, 60, 60);
             material = new THREE.MeshBasicMaterial({ map: textures[j] });
@@ -779,15 +779,15 @@ function zoomToPlanet(planet) {
     var zoomDistance = 3; // Adjust zoom distance based on the scale of your scene
 
     // Camera controls adjustments for smoother behavior
-    controls.rotateSpeed = 1.0;  // Reduced rotate speed for smoother rotations
-    controls.zoomSpeed = 3.0;    // Reduced zoom speed for smoother zooming
-    controls.panSpeed = 0.3;     // Reduce pan speed for smoother panning
+    controls.rotateSpeed = 2.0;  // Reduced rotate speed for smoother rotations
+    controls.zoomSpeed = 7.0;    // Reduced zoom speed for smoother zooming
+    controls.panSpeed = 1;     // Reduce pan speed for smoother panning
     controls.noZoom = false;
     controls.noPan = false;
     controls.staticMoving = true; // Enable dynamic movement for smoothness
     controls.dynamicDampingFactor = 100; // Increase damping for even smoother control response
     controls.minDistance = 0.17;
-    controls.maxDistance = 100;
+    controls.maxDistance = 0.17
     controls.keys = [65, 83, 68]; // Control keys
 
     // Smooth transition for the camera position
