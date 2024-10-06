@@ -71,7 +71,7 @@ function traceOrbits() {
         });
 
         // Create a new material with the random color
-        var material = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.6 });
+        var material = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 1 });
 
         // Create the line object from the geometry and material
         var line = new THREE.Line(geometry, material);
@@ -151,7 +151,7 @@ function updatePosition()
 		curObj = scene.getObjectByName(hBName) ;
 		curObj.position.set (Xpos, Ypos, Zpos) ;
 		
-	//	console.log(curObj.name + "  " + curObj.position.x + ",  " + curObj.position.y + ",  " + curObj.position.z  ) ;
+	// console.log(curObj.name + "  " + curObj.position.x + ",  " + curObj.position.y + ",  " + curObj.position.z  ) ;
 		  
 	 // Calculate mean motion n:
 		 var n = (2 * Math.PI) / (heavenlyBodies[hB].period) ;   // radians per day
@@ -164,7 +164,7 @@ function updatePosition()
 	 // Calculate current Mean Anomaly	
 		var m0 = eA - e * Math.sin(eA);	
 	   
-	 // deltaTime = (Math.abs(m0/n) - heavenlyBodies[hB].time) * simSpeed
+	//  deltaTime = (Math.abs(m0/n) - heavenlyBodies[hB].time) * simSpeed
     //  deltaTime = Math.abs(m0/n) * simSpeed
 	    deltaTime = simSpeed * n
 
@@ -191,7 +191,7 @@ function updatePosition()
  *                            {--- Global variables --}                                         *
  *----------------------------------------------------------------------------------------------*/
 var epoch = new Date('October 5, 2024');  // start the calendar 
-var simSpeed = 0.75 ;                        // value from the scroll control
+var simSpeed = 0.25 ;                        // value from the scroll control
 var solid = true;                        // start simulation with solid rendering of orbits
 var solidLabels = true;                  // start simulation with solid rendering of Labels
 

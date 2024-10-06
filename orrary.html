@@ -520,12 +520,12 @@
       var distance = camera.position.distanceTo(controls.target);
       if(distance > 1)
       {
-        sunglow.scale.set(0.5 * distance/3, 0.5 * distance/3, 1.4 * distance/3);
+        sunglow.scale.set(0.4 * distance/3, 0.4 * distance/3, 1.3 * distance/3);
       } else {
         sunglow.scale.set(0.5, 0.5, 1.4);
       }
-      sun.rotation.y += 0.001;
-      sun.rotation.x += 0.0001;
+      sun.rotation.y += 0.0001;
+      sun.rotation.x += 0.001;
 
       // for (i = 0; i < objLen; i++) {
       //   curObj = scene.getObjectByName(objNames[i]);
