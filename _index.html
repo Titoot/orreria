@@ -1,0 +1,602 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
+<style>
+    body{
+        overflow:hidden;
+        background-color: black;
+    }
+
+    .discover-section {
+    
+      font-family: Poppins, sans-serif;
+    
+    }
+    
+    
+    .discover-container {
+    
+      width: 100%;
+    
+      padding: 50px 80px;
+    
+    }
+    @media (max-width: 991px) {
+
+.discover-container {
+
+  max-width: 100%;
+
+  padding: 100px 20px 0;
+
+}
+
+}
+
+
+.background-image {
+
+position: absolute;
+
+inset: 0;
+
+height: 100%;
+
+width: 100%;
+
+object-fit: cover;
+
+object-position: center;
+
+opacity: 0.7;
+
+}
+
+
+.header-container {
+
+position: relative;
+
+display: flex;
+
+width: 445px;
+
+max-width: 100%;
+
+gap: 28px;
+
+font-weight: 500;
+
+}
+
+.logo-container {
+
+display: flex;
+
+gap: 3px;
+
+font-size: 23px;
+
+color: #fff;
+
+white-space: nowrap;
+
+letter-spacing: 0.69px;
+
+}
+
+
+@media (max-width: 991px) {
+
+.logo-container {
+
+  white-space: initial;
+
+}
+
+}
+
+
+.logo-image {
+
+aspect-ratio: 0.98;
+
+object-fit: contain;
+
+object-position: center;
+
+width: 41px;
+
+}
+
+
+.logo-text {
+
+text-shadow: 0 2px 4px rgba(255, 255, 255, 0.25);
+
+flex-basis: auto;
+
+margin: auto 0;
+
+}
+
+.nav-container {
+
+align-self: start;
+
+display: flex;
+
+margin-top: 11px;
+
+align-items: start;
+
+gap: 40px;
+
+font-size: 16px;
+
+color: #76768f;
+
+justify-content: start;
+
+flex-grow: 1;
+
+flex-basis: auto;
+
+}
+
+
+.nav-item {
+    color: #fff;
+    width: 48px;
+}
+
+
+@media (max-width: 991px) {
+
+.nav-item {
+
+  white-space: initial;
+
+}
+
+}
+
+.nav-indicator {
+
+background-color: #fff;
+
+align-self: center;
+
+display: flex;
+
+min-height: 2px;
+
+width: 10px;
+
+}
+
+
+.nav-link {
+
+align-self: stretch;
+
+gap: 10px;
+
+white-space: nowrap;
+
+text-decoration: none; /* Remove underline */
+
+
+color: inherit;
+
+}
+
+.nav-link:hover {
+  filter: brightness(0.8);
+}
+
+
+@media (max-width: 991px) {
+
+.nav-link {
+
+  white-space: initial;
+
+}
+
+}
+
+
+.main-title {
+
+position: relative;
+
+background-blend-mode: color_dodge;
+
+color: #fff;
+
+text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+font-size: 125px;
+
+font-weight: 700;
+
+letter-spacing: 3.75px;
+
+margin: 183px 0 0 14px;
+
+}
+
+@media (max-width: 991px) {
+
+.main-title {
+
+  max-width: 100%;
+
+  margin-top: 40px;
+
+  font-size: 40px;
+
+}
+
+}
+
+
+.subtitle {
+
+position: relative;
+
+align-self: stretch;
+
+margin-top: 154px;
+
+gap: 10px;
+
+color: #fff;
+
+padding: 10px;
+
+font: 800 38px Inter, sans-serif;
+
+}
+
+
+@media (max-width: 991px) {
+
+.subtitle {
+
+  margin-top: 40px;
+
+}
+
+}
+
+
+.separator {
+
+position: relative;
+
+margin-left: 14px;
+
+width: 331px;
+
+max-width: 100%;
+
+border: 1px solid rgba(255, 255, 255, 0.75);
+
+}
+
+@media (max-width: 991px) {
+
+.separator {
+
+  margin-left: 10px;
+
+}
+
+}
+
+
+.cta-container {
+
+position: relative;
+
+display: flex;
+
+width: 343px;
+
+max-width: 100%;
+
+color: #fff;
+
+font: 700 38px Inter, sans-serif;
+
+padding: 17;
+
+}
+
+
+@media (max-width: 991px) {
+
+.cta-container {
+
+  margin-left: 2px;
+
+}
+
+}
+
+
+.cta-button {
+
+align-self: stretch;
+
+margin-right: -250px;
+
+gap: 10px;
+
+flex-grow: 1;
+
+flex-basis: auto;
+
+}
+
+.cta-separator {
+
+align-self: start;
+
+margin-top: 65px;
+
+width: 100%;
+
+border: 1px solid rgba(255, 255, 255, 0.75);
+
+}
+
+
+@media (max-width: 991px) {
+
+.cta-separator {
+
+  margin-top: 40px;
+
+}
+
+}
+
+
+.colorful-text {
+
+position: relative;
+
+text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+align-self: stretch;
+
+gap: 10px;
+
+color: #fff;
+
+padding: 10px;
+
+font: 400 50px Inter, sans-serif;
+
+margin: 0;
+
+}
+
+
+@media (max-width: 991px) {
+
+.colorful-text {
+
+  font-size: 40px;
+
+}
+
+}
+
+.footer-container {
+
+position: relative;
+
+display: flex;
+
+gap: 24px;
+
+font-size: 16px;
+
+color: #76768f;
+
+font-weight: 500;
+
+flex-wrap: wrap;
+
+margin: 67px 0 0 14px;
+
+}
+
+
+@media (max-width: 991px) {
+
+.footer-container {
+
+  margin-top: 40px;
+
+}
+
+}
+
+
+.footer-logo {
+
+aspect-ratio: 5.99;
+
+object-fit: contain;
+
+object-position: center;
+
+width: 192px;
+
+max-width: 100%;
+
+}
+
+
+.footer-text {
+
+flex-basis: auto;
+
+flex-grow: 1;
+
+margin: auto 0;
+
+}
+
+@media (max-width: 991px) {
+
+.footer-text {
+
+  max-width: 100%;
+
+}
+
+}
+
+
+.visually-hidden {
+
+position: absolute;
+
+width: 1px;
+
+height: 1px;
+
+padding: 0;
+
+margin: -1px;
+
+overflow: hidden;
+
+clip: rect(0, 0, 0, 0);
+
+white-space: nowrap;
+
+border: 0;
+
+}
+
+.subtitle-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Keep the text color of the h2 */
+}
+
+.subtitle-link:hover {
+  filter: brightness(0.8);
+}
+
+
+.color-red { color: #ff7b7b; }
+
+.color-green { color: #97ff72; }
+
+.color-yellow { color: #fff970; }
+
+.color-purple { color: #a839ff; }
+
+.color-blue { color: #48b2ff; }
+
+.color-pink { color: #ff4d8d; }
+
+</style>
+
+<section class="discover-section">
+
+    <div class="discover-container">
+  
+      <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d73502bcc408a0ab29f426e7a85aa24f5fb9a28c32d9fcb36d2653ee97218269?placeholderIfAbsent=true&apiKey=ea5d22e1874f4ed19dcbdbd830c50a26" alt="" class="background-image" />
+  
+      <header class="header-container">
+  
+        <div class="logo-container">
+  
+          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/c4e58ccdf11b7ecb590d222c5b291770741b6140520f8c678d7403fa4546a6d8?placeholderIfAbsent=true&apiKey=ea5d22e1874f4ed19dcbdbd830c50a26" alt="Orreria Logo" class="logo-image" />
+  
+          <div class="logo-text">ORRERIA</div>
+  
+        </div>
+  
+        <nav class="nav-container">
+  
+          <div class="nav-item">
+  
+            <div>Home</div>
+  
+            <div class="nav-indicator"></div>
+  
+          </div>
+  
+          <a href="about.html" class="nav-link">About</a>
+  
+          <a href="contact.html" class="nav-link">Contact us</a>
+  
+        </nav>
+  
+      </header>
+  
+      <h1 class="main-title">
+  
+        <span style="font-weight: 275;">DISCOVER</span>
+  
+        <span style="font-weight: 500;">ORRERIA</span>
+  
+      </h1>
+  
+      <a href="orrary.html" class="subtitle-link">
+        <h2 class="subtitle">Explore The Orrery</h2>
+        </a>
+  
+      <!-- <div class="separator"></div>
+  
+      <div class="cta-container">
+  
+        <a class="cta-button">View Planets</a>
+  
+        <div class="cta-separator"></div>
+  
+      </div>
+      <p class="colorful-text">
+
+        <span class="color-red">O</span>
+
+        <span class="color-green">R</span>
+  
+        <span class="color-yellow">R</span>
+  
+        <span class="color-purple">E</span>
+  
+        <span class="color-blue">R</span>
+  
+        <span class="color-pink">I</span>
+  
+        <span class="color-green">A</span>
+  
+        <span class="color-purple">K</span>
+  
+        <span class="color-yellow">i</span>
+  
+        <span class="color-red">D</span>
+  
+        <span class="color-blue">S</span>
+  
+      </p> -->
+  
+      <footer class="footer-container">
+  
+        <!-- <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a889b776b79d3ca3923e024320410a1b2f50054c95d445480ecb63d7b3a01f42?placeholderIfAbsent=true&apiKey=ea5d22e1874f4ed19dcbdbd830c50a26" alt="NASA Space Apps Challenge Logo" class="footer-logo" /> -->
+  
+        <p class="footer-text">Team Keplerians@2024 Nasa Space Apps Challenge</p>
+  
+      </footer>
+  
+    </div>
+  
+  </section>
