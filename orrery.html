@@ -542,7 +542,7 @@
       	//  Here comes the Sun!
         // Create the Sun (Core)
         var geometry = new THREE.SphereGeometry(0.05, 60, 60);
-        var material = new THREE.MeshBasicMaterial({map: sunTexture});
+        var material = new THREE.MeshBasicMaterial({map: sunTexture ,reflectivity:3, shininess :3});
         sun = new THREE.Mesh(geometry, material);
         scene.add(sun);
 
@@ -578,44 +578,51 @@
 
 
 
-        // Create fog effect
-        var fogGeometry = new THREE.SphereGeometry(0.05, 60, 60); 
-        var fogMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.1, // Adjust for desired strength of the glow
-          blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
-        });
-        var fogMesh = new THREE.Mesh(fogGeometry, fogMaterial);
-        sun.add(fogMesh); // Add the fog mesh around the sun
+        // // Create fog effect
+        // var fogGeometry = new THREE.SphereGeometry(0.05, 60, 60); 
+        // var fogMaterial = new THREE.MeshBasicMaterial({
+        //   color: 0xffffff,
+        //   transparent: true,
+        //   opacity: 0.1, // Adjust for desired strength of the glow
+        //   blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
+        // });
+        // var fogMesh = new THREE.Mesh(fogGeometry, fogMaterial);
+        // sun.add(fogMesh); // Add the fog mesh around the sun
 
-        // Optional: Create a fog edge effect with texture
-        var fogTextureLoader = new THREE.TextureLoader();
-        var fogTexture = fogTextureLoader.load(siteUrl+'/Shaders/fog1.png'); // Load a texture
+        // // Optional: Create a fog edge effect with texture
+        // var fogTextureLoader = new THREE.TextureLoader();
+        // var fogTexture = fogTextureLoader.load(siteUrl+'/Shaders/fog1.png'); // Load a texture
 
-        var fogSpriteMaterial = new THREE.SpriteMaterial({
-            map: fogTexture,
-            color: 0xffcd38, 
-            transparent: true,
-            opacity: 1, // Adjust opacity for strength
-            blending: THREE.AdditiveBlending
-        });
+        // var fogSpriteMaterial = new THREE.SpriteMaterial({
+        //     map: fogTexture,
+        //     color: 0xffcd38, 
+        //     transparent: true,
+        //     opacity: 1, // Adjust opacity for strength
+        //     blending: THREE.AdditiveBlending
+        // });
 
-        // Create a sprite for the glowing edge effect
-        spaceFog = new THREE.Sprite(fogSpriteMaterial);
-        spaceFog.scale.set(50, 50, 100); // Adjust size of the glow sprite
-        fogMesh.add(spaceFog); // Attach the glow sprite to the glow mesh
-
-
+        // // Create a sprite for the glowing edge effect
+        // spaceFog = new THREE.Sprite(fogSpriteMaterial);
+        // spaceFog.scale.set(50, 50, 100); // Adjust size of the glow sprite
+        // fogMesh.add(spaceFog); // Attach the glow sprite to the glow mesh
 
 
 
 
-        
-        for (i = 0; i < objLen; i++) { // Add the inner planets.
+
+
+        // Set camera position
+        camera.position.set(0, 100, 200); // Adjust as necessary
+        camera.lookAt(0, 0, 0); // Look at the center
+
+        // Enable shadow maps
+        renderer.shadowMap.enabled = true;
+
+        // Add the inner planets.
+        for (i = 0; i < objLen; i++) { 
             // Create the planet geometry and material
             geometry = new THREE.SphereGeometry(objSizes[j] * 50, 60, 60);
-            material = new THREE.MeshBasicMaterial({ map: textures[j] });
+            material = new THREE.MeshStandardMaterial({ map: textures[j] }); // Use MeshStandardMaterial instead
             planet = new THREE.Mesh(geometry, material);
             
             // Set the name of the planet
@@ -629,57 +636,55 @@
             // Add planet to the scene
             scene.add(planet);
             
-            
             // Saturn Ring
             if (i === 5) {
-            const ringGeometry = new THREE.RingBufferGeometry(3, 5, 64);
-            var pos = ringGeometry.attributes.position;
-            var v3 = new THREE.Vector3();
-            for (let i = 0; i < pos.count; i++){
-              v3.fromBufferAttribute(pos, i);
-              ringGeometry.attributes.uv.setXY(i, v3.length() < 4 ? 0 : 1, 1);
-            }
-            
-            const ringTexture = new THREE.TextureLoader().load("https://i.postimg.cc/zz7Gr430/saturn-rings-top.png");
+                const ringGeometry = new THREE.RingBufferGeometry(3, 5, 64);
+                var pos = ringGeometry.attributes.position;
+                var v3 = new THREE.Vector3();
+                for (let i = 0; i < pos.count; i++){
+                    v3.fromBufferAttribute(pos, i);
+                    ringGeometry.attributes.uv.setXY(i, v3.length() < 4 ? 0 : 1, 1);
+                }
+                
+                const ringTexture = new THREE.TextureLoader().load("https://i.postimg.cc/zz7Gr430/saturn-rings-top.png");
 
-            const ringMaterial = new THREE.MeshBasicMaterial({
-            map: ringTexture,
-            color: 0xffffff,
-            side: THREE.DoubleSide,
-            transparent: true
-          });
+                const ringMaterial = new THREE.MeshStandardMaterial({ // Use MeshStandardMaterial for the rings
+                    map: ringTexture,
+                    side: THREE.DoubleSide,
+                    transparent: true
+                });
 
-            rings = new THREE.Mesh(ringGeometry, ringMaterial); 
+                rings = new THREE.Mesh(ringGeometry, ringMaterial); 
 
+                // Rotate rings to lie flat
+                rings.rotation.x = Math.PI / 2;
 
-            // Rotate rings to lie flat
-            rings.rotation.x = Math.PI / 2;
+                // Scale rings to match Saturn's size
+                rings.scale.set(0.03, 0.03, 0.03);
 
-            // Scale rings to match Saturn's size
-            rings.scale.set(0.03, 0.03, 0.03);
+                // Set position slightly above Saturn
+                rings.position.set(0, 0, 0); 
 
-            // Set position slightly above Saturn
-            rings.position.set(0, 0, 0); 
-
-            // Add rings to the scene
-            scene.add(rings);
+                // Add rings to the scene
+                scene.add(rings);
             }
 
-            // Ensure proper lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); 
-            scene.add(ambientLight);
+            // Create and add the hemisphere light
+            const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5); // Adjust intensity
+            hemisphereLight.color.setHSL(0, 0, 0.1);
+            hemisphereLight.groundColor.setHSL( 0, 0, -0.01 );
+            hemisphereLight.position.set( 0, 120, 0 );
+            scene.add(hemisphereLight);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1); 
-            directionalLight.position.set(5, 10, 7.5);
-            scene.add(directionalLight);
+            // Create and add the planet light (DirectionalLight)
+            const planetLight = new THREE.DirectionalLight(0xffffff, 0.1); 
+            planetLight.position.set(-1, 20, 1); // Adjust position
+            planetLight.castShadow = true; // Enable shadow casting
+            scene.add(planetLight);
 
-
-
-            
             // Increment j for the next planet
             j = j + 1;
         }
-
 
         document.addEventListener('mousedown', onDocumentMouseDown, false); 
         camera.position.x = 0;
@@ -743,8 +748,6 @@
           targetPlanet = intersects[0].object;
           console.log("Selected Planet:", targetPlanet.name);
           zoomToPlanet(selectedPlanet);
-          var orbitLine = scene.getObjectByName(selectedPlanet.name+'_trace');
-          orbitLine.visible = false;
           $('.panel h1').text(selectedPlanet.name.split('_')[0]);
           $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + selectedPlanet.name.split('_')[0], function(data) {
               $('.panel .subtitle').text(data.tagline);
@@ -763,8 +766,6 @@
 
             if (distance < threshold) { 
                 zoomToPlanet(planet);
-                var orbitLine = scene.getObjectByName(planet.name+'_trace');
-                orbitLine.visible = false;
                 targetPlanet = planet;
                 $('.panel h1').text(planet.name.split('_')[0]);
                 $.get('https://planets-17f2.onrender.com/planets/getPlanet?name=' + planet.name.split('_')[0], function(data) {
@@ -783,15 +784,15 @@ function zoomToPlanet(planet) {
     var zoomDistance = 3; // Adjust zoom distance based on the scale of your scene
 
     // Camera controls adjustments for smoother behavior
-    controls.rotateSpeed = 1.0;  // Reduced rotate speed for smoother rotations
-    controls.zoomSpeed = 3.0;    // Reduced zoom speed for smoother zooming
-    controls.panSpeed = 0.3;     // Reduce pan speed for smoother panning
+    controls.rotateSpeed = 2.0;  // Reduced rotate speed for smoother rotations
+    controls.zoomSpeed = 7.0;    // Reduced zoom speed for smoother zooming
+    controls.panSpeed = 1;     // Reduce pan speed for smoother panning
     controls.noZoom = false;
     controls.noPan = false;
     controls.staticMoving = true; // Enable dynamic movement for smoothness
     controls.dynamicDampingFactor = 100; // Increase damping for even smoother control response
     controls.minDistance = 0.17;
-    controls.maxDistance = 100;
+    controls.maxDistance = 0.17
     controls.keys = [65, 83, 68]; // Control keys
 
     // Smooth transition for the camera position
