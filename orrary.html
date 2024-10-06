@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.40/jquery.csv.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonld/0.3.15/jsonld.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/90/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/7/Stats.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/25.0.0/tween.umd.js"></script>
     <script src="TrackballControls.js"></script>
@@ -457,12 +457,13 @@
         sun = new THREE.Mesh(geometry, material);
         scene.add(sun);
 
+
         // // Create the glow effect around the sun
         var glowGeometry = new THREE.SphereGeometry(0.05, 60, 60); // Slightly larger sphere for the glow border
         var glowMaterial = new THREE.MeshBasicMaterial({
             color: 0xf5bf6e, // Orange color for vintage effect
             transparent: true,
-            opacity: 1, // Adjust for desired strength of the glow
+            opacity: 0.9, // Adjust for desired strength of the glow
             blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
         });
         var glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
@@ -471,11 +472,10 @@
         // Optional: Create a glowing edge effect with texture
         var glowTextureLoader = new THREE.TextureLoader();
         var glowTexture = glowTextureLoader.load(siteUrl+'/Shaders/glow2.png'); // Load a texture
-
         var glowSpriteMaterial = new THREE.SpriteMaterial({
             map: glowTexture,
             color: 0xffcd38, // Orange color for the texture
-            transparent: true,
+            transparent: false,
             opacity: 1, // Adjust opacity for strength
             blending: THREE.AdditiveBlending
         });
@@ -489,14 +489,13 @@
 
 
 
-
-          // // Create fog effect
-          var fogGeometry = new THREE.SphereGeometry(0.05, 60, 60); 
+        // Create fog effect
+        var fogGeometry = new THREE.SphereGeometry(0.05, 60, 60); 
         var fogMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.1, // Adjust for desired strength of the glow
-            blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.1, // Adjust for desired strength of the glow
+          blending: THREE.AdditiveBlending // Blend mode for a soft glow effect
         });
         var fogMesh = new THREE.Mesh(fogGeometry, fogMaterial);
         sun.add(fogMesh); // Add the fog mesh around the sun
@@ -523,7 +522,7 @@
 
 
 
-
+        
         for (i = 0; i < objLen; i++) { // Add the inner planets.
             // Create the planet geometry and material
             geometry = new THREE.SphereGeometry(objSizes[j] * 50, 60, 60);
@@ -541,33 +540,51 @@
             // Add planet to the scene
             scene.add(planet);
             
-
-            // YAAA ABDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-            // If the planet is Saturn (index 5), create and add the rings
-          if (i === 5) {
-            // Create Saturn's rings
-            const ringGeometry = new THREE.TorusGeometry(0.1, 0.01, 2, 200);
             
-            // Load the texture from a file path
-            const textureLoader = new THREE.TextureLoader();
-            const ringTexture = textureLoader.load('/planets/2k_saturn_rings.png', () => {
-                // This function is called after the texture is loaded
-                rings.material.map = ringTexture; // Set the loaded texture to the ring material
-                rings.material.needsUpdate = true; // Notify Three.js to update the material
-            });
+            // Saturn Ring
+            if (i === 5) {
+            const ringGeometry = new THREE.RingBufferGeometry(3, 5, 64);
+            var pos = ringGeometry.attributes.position;
+            var v3 = new THREE.Vector3();
+            for (let i = 0; i < pos.count; i++){
+              v3.fromBufferAttribute(pos, i);
+              ringGeometry.attributes.uv.setXY(i, v3.length() < 4 ? 0 : 1, 1);
+            }
+            
+            const ringTexture = new THREE.TextureLoader().load("https://i.postimg.cc/zz7Gr430/saturn-rings-top.png");
 
-            const ringMaterial = new THREE.MeshBasicMaterial({ map: ringTexture, side: THREE.DoubleSide }); // Use texture in material
-            rings = new THREE.Mesh(ringGeometry, ringMaterial); // Initialize rings here
+            const ringMaterial = new THREE.MeshBasicMaterial({
+            map: ringTexture,
+            color: 0xffffff,
+            side: THREE.DoubleSide,
+            transparent: true
+          });
+
+            rings = new THREE.Mesh(ringGeometry, ringMaterial); 
+
 
             // Rotate rings to lie flat
             rings.rotation.x = Math.PI / 2;
 
-            // Set position to match Saturn's position but with an offset
-            // rings.position.copy(planet.position);
+            // Scale rings to match Saturn's size
+            rings.scale.set(0.03, 0.03, 0.03);
+
+            // Set position slightly above Saturn
+            rings.position.set(0, 0, 0); 
 
             // Add rings to the scene
             scene.add(rings);
-          }
+            }
+
+            // Ensure proper lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); 
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1); 
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+
 
             
             // Increment j for the next planet
