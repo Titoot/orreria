@@ -541,22 +541,34 @@
             // Add planet to the scene
             scene.add(planet);
             
+
+            // YAAA ABDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
             // If the planet is Saturn (index 5), create and add the rings
             if (i === 5) {
-                // Create Saturn's rings
-                const ringGeometry = new THREE.TorusGeometry(planet.geometry.parameters.radius * 1.5, 0.005, 20, 50);
-                const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-                rings = new THREE.Mesh(ringGeometry, ringMaterial); // Initialize rings here
-                
-                // Rotate rings to lie flat
-                rings.rotation.x = Math.PI / 2;
-                
-                // Set position to match Saturn's position but with an offset
-                rings.position.copy(planet.position);
-                
-                // Add rings to the scene
-                scene.add(rings);
-            }
+            // Create Saturn's rings
+            const ringGeometry = new THREE.TorusGeometry(0.1, 0.01, 2, 200);
+            
+            // Load the texture from a file path
+            const textureLoader = new THREE.TextureLoader();
+            const ringTexture = textureLoader.load('/planets/2k_saturn_rings.png', () => {
+                // This function is called after the texture is loaded
+                rings.material.map = ringTexture; // Set the loaded texture to the ring material
+                rings.material.needsUpdate = true; // Notify Three.js to update the material
+            });
+
+            const ringMaterial = new THREE.MeshBasicMaterial({ map: ringTexture, side: THREE.DoubleSide }); // Use texture in material
+            rings = new THREE.Mesh(ringGeometry, ringMaterial); // Initialize rings here
+
+            // Rotate rings to lie flat
+            rings.rotation.x = Math.PI / 2;
+
+            // Set position to match Saturn's position but with an offset
+            rings.position.copy(planet.position);
+
+            // Add rings to the scene
+            scene.add(rings);
+        }
+
             
             // Increment j for the next planet
             j = j + 1;
@@ -668,7 +680,7 @@ function zoomToPlanet(planet) {
     controls.noZoom = false;
     controls.noPan = false;
     controls.staticMoving = true; // Enable dynamic movement for smoothness
-    controls.dynamicDampingFactor = 0.2; // Increase damping for even smoother control response
+    controls.dynamicDampingFactor = 100; // Increase damping for even smoother control response
     controls.minDistance = 0.17;
     controls.maxDistance = 100;
     controls.keys = [65, 83, 68]; // Control keys
