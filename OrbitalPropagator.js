@@ -205,7 +205,7 @@ function updatePosition()
  *                            {--- Global variables --}                                         *
  *----------------------------------------------------------------------------------------------*/
 var epoch = new Date('October 5, 2024');  // start the calendar 
-var simSpeed = 0.25 ;                        // value from the scroll control
+var simSpeed = 0.75 ;                        // value from the scroll control
 var solid = true;                        // start simulation with solid rendering of orbits
 var solidLabels = true;                  // start simulation with solid rendering of Labels
 
